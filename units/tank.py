@@ -1,16 +1,20 @@
 import pygame
 from units.turret import Turret
+from units.shell import Shell
 
 
 class Tank(pygame.sprite.Sprite):
     
-    def __init__(self, pos, speed, reloading, shot_speed, path, groups, obstacle_sprites):
+    def __init__(self, pos, speed, reloading, shot_speed, damage, path, groups, obstacle_sprites):
         super().__init__(groups)
         self.obstacle_sprites = obstacle_sprites
+        self.visible_sprites = groups[0]
 
         self.image_origin = pygame.image.load(path[0]).convert_alpha()
         self.image_head_origin = pygame.image.load(path[1]).convert_alpha()
         self.image_shell_origin = pygame.image.load(path[2]).convert_alpha()
+
+        self.shell_size = self.image_shell_origin.get_size()
 
         self.image = self.image_origin
         self.rect = self.image.get_rect(topleft = pos)
@@ -20,6 +24,7 @@ class Tank(pygame.sprite.Sprite):
         self.reloading = reloading
         self.cur_reloading = reloading
         self.shot_speed = shot_speed
+        self.damage = damage
 
         self.turret = Turret(pos, self.image_head_origin, self.rect, groups[0])
 
@@ -47,15 +52,10 @@ class Tank(pygame.sprite.Sprite):
 
     def rotate(self, vector):
         direction = (vector.x, vector.y)
-        match direction:
-            case (0, -1):
-                deg = 0
-            case (0, 1):
-                deg = 180
-            case (-1, 0):
-                deg = 90
-            case (1, 0):
-                deg = -90
+        if direction == (0, -1): deg = 0
+        elif direction == (0, 1): deg = 180
+        elif direction == (-1, 0): deg = 90
+        elif direction == (1, 0): deg = -90
         self.image = pygame.transform.rotate(self.image_origin, deg)
         self.rect = self.image.get_rect(center = self.rect.center)
 
@@ -63,11 +63,14 @@ class Tank(pygame.sprite.Sprite):
         self.turret.draw()
 
     def shot(self):
-        pass
+        if self.cur_reloading >= self.reloading:
+            
+            if self.turret.vector == (0, -1): pos = (self.rect.centerx, self.turret.rect.top - self.shell_size[1] * 3)
+            elif self.turret.vector == (0, 1): pos = (self.rect.centerx, self.turret.rect.bottom + self.shell_size[1] * 3)
+            elif self.turret.vector == (-1, 0): pos = (self.turret.rect.left - self.shell_size[0] * 3, self.rect.centery)
+            elif self.turret.vector == (1, 0): pos = (self.turret.rect.right + self.shell_size[0] * 10, self.rect.centery)
 
-        # if self.cur_reload >= self.reload:
-        #     pos = (self.rect_head.centerx, self.rect_head.centery)
-        #     Shell(pos, self.vector_head, self.image_shell_origin, self.groups, self.obstacle_sprites)
-        #     self.cur_reload = 0
-        # else:
-        #     self.cur_reload += 0.09
+            Shell(pos, self.turret.vector, self.shot_speed, self.damage, self.image_shell_origin, [self.visible_sprites], self.obstacle_sprites)
+            self.cur_reloading = 0
+        else:
+            self.cur_reloading += 0.09

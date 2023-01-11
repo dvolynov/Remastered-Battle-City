@@ -1,7 +1,6 @@
 import pygame
 
 from settings import *
-from config import *
 
 from level import Level
 
@@ -22,7 +21,7 @@ class Game:
 		while True:
 			self.stop()
 
-			self.screen.fill(colors['ground'])
+			self.screen.fill((0, 0, 0))
 			self.level.run()
 
 			pygame.display.update()		

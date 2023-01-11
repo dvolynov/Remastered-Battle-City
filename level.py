@@ -5,9 +5,8 @@ import os
 import csv
 
 from settings import *
-from config import *
 
-from units import Tile
+from units import *
 from player import Player
 
 
@@ -31,7 +30,7 @@ class Level(pygame.sprite.Sprite):
             map.append(list(row))
 
         player = (0, 0)
-        grass = []
+        bushes = []
 
         for i, row in enumerate(map):
             for j, tile_id in enumerate(row):
@@ -39,19 +38,24 @@ class Level(pygame.sprite.Sprite):
                 x = j * TILE_SIZE
                 y = i * TILE_SIZE
 
-                if tile_id == '0':
-                    continue
-                elif tile_id == '4':
-                    player_pos = (x, y)
-                elif tile_id == '5':
-                    grass.append((x, y))
-                else:
-                    Tile((x, y), TILE_SIZE, images[tile_id], [self.visile_sprites, self.obstacle_sprites])
+                Ground((x, y), TILE_SIZE, [self.visile_sprites])
 
-        self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, images['4'], [self.visile_sprites], self.obstacle_sprites)
+                match tile_id:
+                    case '1':
+                        Stone((x, y), TILE_SIZE, [self.visile_sprites, self.obstacle_sprites])
+                    case '2':
+                        Box1((x, y), TILE_SIZE, [self.visile_sprites, self.obstacle_sprites])
+                    case '3':
+                        Box2((x, y), TILE_SIZE, [self.visile_sprites, self.obstacle_sprites])
+                    case '4':
+                        player_pos = (x, y)
+                    case '5':
+                        bushes.append((x, y))
 
-        for x, y in grass:
-            Tile((x, y), TILE_SIZE, images['5'], [self.visile_sprites])
+        self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, [self.visile_sprites], self.obstacle_sprites)
+
+        for x, y in bushes:
+            Bush((x, y), TILE_SIZE, [self.visile_sprites])
 
     def run(self):
         self.visile_sprites.custom_draw(self.player)

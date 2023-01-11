@@ -6,8 +6,13 @@ from settings import FPS
 
 class Player(Tank):
     
-    def __init__(self, pos, speed, reloading, shot_speed, path, groups, obstacle_sprites):
-        super().__init__(pos, speed, reloading, shot_speed, path, groups, obstacle_sprites)
+    def __init__(self, pos, speed, reloading, shot_speed, damage, groups, obstacle_sprites):
+        path = [
+            "assets/body.png",
+            "assets/head.png",
+            'assets/bullet.png'
+        ]
+        super().__init__(pos, speed, reloading, shot_speed, damage, path, groups, obstacle_sprites)
 
     def input(self):
         keys = pygame.key.get_pressed()
