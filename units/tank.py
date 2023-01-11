@@ -5,7 +5,7 @@ from units.shell import Shell
 
 class Tank(pygame.sprite.Sprite):
     
-    def __init__(self, pos, speed, reloading, shot_speed, damage, path, groups, obstacle_sprites):
+    def __init__(self, pos, speed, reloading, shot_speed, damage, hp, ammunition, path, groups, obstacle_sprites):
         super().__init__(groups)
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = groups[0]
@@ -25,6 +25,9 @@ class Tank(pygame.sprite.Sprite):
         self.cur_reloading = reloading
         self.shot_speed = shot_speed
         self.damage = damage
+        self.ammunition = ammunition
+
+        self.hp = hp
 
         self.turret = Turret(pos, self.image_head_origin, self.rect, groups[0])
 
@@ -63,7 +66,7 @@ class Tank(pygame.sprite.Sprite):
         self.turret.draw()
 
     def shot(self):
-        if self.cur_reloading >= self.reloading:
+        if self.cur_reloading >= self.reloading and self.ammunition:
             
             if self.turret.vector == (0, -1): pos = (self.rect.centerx, self.turret.rect.top - self.shell_size[1] * 3)
             elif self.turret.vector == (0, 1): pos = (self.rect.centerx, self.turret.rect.bottom + self.shell_size[1] * 3)
@@ -71,6 +74,7 @@ class Tank(pygame.sprite.Sprite):
             elif self.turret.vector == (1, 0): pos = (self.turret.rect.right + self.shell_size[0] * 10, self.rect.centery)
 
             Shell(pos, self.turret.vector, self.shot_speed, self.damage, self.image_shell_origin, [self.visible_sprites], self.obstacle_sprites)
+            self.ammunition -= 1
             self.cur_reloading = 0
         else:
-            self.cur_reloading += 0.09
+            self.cur_reloading += 0.07

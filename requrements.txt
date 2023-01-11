@@ -1,1 +1,14 @@
 pygame==2.1.2
+
+
+
+j = pygame.joystick.Joystick(0)
+        j.init()
+        btns = j.get_numbuttons()
+
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.JOYBUTTONDOWN:
+                for btn in btns:
+                    if j.get_button(btn):
+                        show(btn)

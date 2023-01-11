@@ -52,6 +52,8 @@ class Level(pygame.sprite.Sprite):
                         player_pos = (x, y)
                     case '5':
                         bushes.append((x, y))
+                    case '6':
+                        Ammunition((x, y), TILE_SIZE, [self.visile_sprites])
 
         self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, [self.visile_sprites], self.obstacle_sprites)
 

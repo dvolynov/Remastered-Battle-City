@@ -12,7 +12,9 @@ class Player(Tank):
             "assets/head.png",
             'assets/bullet.png'
         ]
-        super().__init__(pos, speed, reloading, shot_speed, damage, path, groups, obstacle_sprites)
+        hp = 500
+        ammunition = 20
+        super().__init__(pos, speed, reloading, shot_speed, damage, hp, ammunition, path, groups, obstacle_sprites)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -57,3 +59,4 @@ class Player(Tank):
         self.input()
         self.move(self.speed)
         self.turret.update(self.rect)
+        show(self.ammunition)

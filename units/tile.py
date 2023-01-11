@@ -1,6 +1,5 @@
 import pygame
 from settings import DAMAGE
-from debug import show
 
 
 class Tile(pygame.sprite.Sprite):
@@ -20,9 +19,10 @@ class Tile(pygame.sprite.Sprite):
                 self.set_new_image(self.path_broken)
                 for group in self.groups:
                     group.remove(self)
-            elif self.hp <= DAMAGE:
-                print('hit')
-                self.set_new_image(self.path_hit)
+
+            for i, path in enumerate(self.paths_hit):
+                if self.hp <= DAMAGE * (len(self.paths_hit) - i):
+                    self.set_new_image(path)
 
     def set_new_image(self, path):
         image = pygame.image.load(path).convert_alpha()
