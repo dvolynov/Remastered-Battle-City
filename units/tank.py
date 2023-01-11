@@ -21,7 +21,7 @@ class Tank(pygame.sprite.Sprite):
         self.cur_reloading = reloading
         self.shot_speed = shot_speed
 
-        self.turret = Turret(pos, self.image_head_origin, self.rect)
+        self.turret = Turret(pos, self.image_head_origin, self.rect, groups[0])
 
     def move(self, speed):
         self.rect.x += self.vector.x * speed
@@ -58,6 +58,9 @@ class Tank(pygame.sprite.Sprite):
                 deg = -90
         self.image = pygame.transform.rotate(self.image_origin, deg)
         self.rect = self.image.get_rect(center = self.rect.center)
+
+    def update(self):
+        self.turret.draw()
 
     def shot(self):
         pass

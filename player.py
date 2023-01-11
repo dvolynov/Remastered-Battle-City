@@ -29,16 +29,20 @@ class Player(Tank):
             self.rotate(self.vector)
 
         if keys[pygame.K_UP]:
+            self.turret.vector.x = 0
             self.turret.vector.y = -1
             self.turret.rotate(self.turret.vector)
         elif keys[pygame.K_DOWN]:
+            self.turret.vector.x = 0
             self.turret.vector.y = 1
             self.turret.rotate(self.turret.vector)
         elif keys[pygame.K_LEFT]:
             self.turret.vector.x = -1
+            self.turret.vector.y = 0
             self.turret.rotate(self.turret.vector)
         elif keys[pygame.K_RIGHT]:
             self.turret.vector.x = 1
+            self.turret.vector.y = 0
             self.turret.rotate(self.turret.vector)
         
         if keys[pygame.K_SPACE]:
@@ -56,3 +60,4 @@ class Player(Tank):
     def update(self):
         self.input()
         self.move(self.speed)
+        self.turret.update(self.rect)
