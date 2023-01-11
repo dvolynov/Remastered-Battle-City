@@ -7,4 +7,3 @@ class Bush(Tile):
     def __init__(self, pos, size, groups):
         path = 'assets/bush.png'
         super().__init__(pos, size, path, groups)
-        self.hp = 50
