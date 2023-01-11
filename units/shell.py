@@ -24,13 +24,15 @@ class Shell(pygame.sprite.Sprite):
 
                 if self.vector.x != 0:
                     if self.vector.x > 0 or self.vector.x < 0:
-                        return True
+                        return sprite
                 elif self.vector.y != 0:
                     if self.vector.y > 0 or self.vector.y < 0:
-                        return True
+                        return sprite
         return False
 
     def update(self):
         self.fly()
-        if self.ishit():
+        hited = self.ishit()
+        if hited:
             self.visible_sprites.remove(self)
+            hited.hit()

@@ -53,15 +53,6 @@ class Player(Tank):
         if keys[pygame.K_SPACE]:
             self.shot()
 
-        # Debug --------------------
-        if keys[pygame.K_f]:
-            show(FPS)
-        if keys[pygame.K_v]:
-            show(self.vector)
-        if keys[pygame.K_h]:
-            show(self.turret.vector)
-        # Debug --------------------
-
     def update(self):
         self.input()
         self.move(self.speed)

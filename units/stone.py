@@ -7,4 +7,3 @@ class Stone(Tile):
     def __init__(self, pos, size, groups):
         path = 'assets/stone.png'
         super().__init__(pos, size, path, groups)
-        self.hp = 200
