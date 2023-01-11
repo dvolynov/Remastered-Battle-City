@@ -10,7 +10,7 @@ class Game:
 
 	def __init__(self):
 		pygame.init()
-		self.screen = pygame.display.set_mode((1280, 720))     # set_mode((0, 0), (pygame.FULLSCREEN)) 
+		self.screen = pygame.display.set_mode((WIDTH, HEIGHT))     # set_mode((0, 0), (pygame.FULLSCREEN)) 
 		pygame.display.set_caption('Tanks v5.0')   
 		self.screen_size = pygame.display.get_surface().get_size()
 		self.clock = pygame.time.Clock()
