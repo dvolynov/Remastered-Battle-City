@@ -1,8 +1,11 @@
 import pygame
 from units.tank import Tank
+from debug import show
+from settings import FPS
 
 
 class Player(Tank):
+    
     def __init__(self, pos, speed, reloading, shot_speed, path, groups, obstacle_sprites):
         super().__init__(pos, speed, reloading, shot_speed, path, groups, obstacle_sprites)
 
@@ -26,16 +29,29 @@ class Player(Tank):
             self.rotate(self.vector)
 
         if keys[pygame.K_UP]:
-            self.turret.rotate()
+            self.turret.vector.y = -1
+            self.turret.rotate(self.turret.vector)
         elif keys[pygame.K_DOWN]:
-            self.turret.rotate(self.vector_head)
+            self.turret.vector.y = 1
+            self.turret.rotate(self.turret.vector)
         elif keys[pygame.K_LEFT]:
-            self.turret.rotate(self.vector_head)
+            self.turret.vector.x = -1
+            self.turret.rotate(self.turret.vector)
         elif keys[pygame.K_RIGHT]:
-            self.turret.rotate(self.vector_head)
+            self.turret.vector.x = 1
+            self.turret.rotate(self.turret.vector)
         
         if keys[pygame.K_SPACE]:
             self.shot()
+
+        # Debug --------------------
+        if keys[pygame.K_f]:
+            show(FPS)
+        if keys[pygame.K_v]:
+            show(self.vector)
+        if keys[pygame.K_h]:
+            show(self.turret.vector)
+        # Debug --------------------
 
     def update(self):
         self.input()

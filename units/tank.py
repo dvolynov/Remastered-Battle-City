@@ -1,5 +1,5 @@
 import pygame
-# from units.turret import Turret
+from units.turret import Turret
 
 
 class Tank(pygame.sprite.Sprite):
@@ -20,6 +20,8 @@ class Tank(pygame.sprite.Sprite):
         self.reloading = reloading
         self.cur_reloading = reloading
         self.shot_speed = shot_speed
+
+        self.turret = Turret(pos, self.image_head_origin, self.rect)
 
     def move(self, speed):
         self.rect.x += self.vector.x * speed
@@ -56,3 +58,13 @@ class Tank(pygame.sprite.Sprite):
                 deg = -90
         self.image = pygame.transform.rotate(self.image_origin, deg)
         self.rect = self.image.get_rect(center = self.rect.center)
+
+    def shot(self):
+        pass
+
+        # if self.cur_reload >= self.reload:
+        #     pos = (self.rect_head.centerx, self.rect_head.centery)
+        #     Shell(pos, self.vector_head, self.image_shell_origin, self.groups, self.obstacle_sprites)
+        #     self.cur_reload = 0
+        # else:
+        #     self.cur_reload += 0.09
