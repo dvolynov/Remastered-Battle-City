@@ -48,7 +48,6 @@ class Level(pygame.sprite.Sprite):
                 match tile_id:
                     case '1':
                         Stone(pos, TILE_SIZE, self.sprites)
-                        # Tank((x, y), SPEED, RELOADING, SHOT_SPEED, DAMAGE, 150, 1000, self.sprites)
                     case '2':
                         Box1(pos, TILE_SIZE, self.sprites)
                     case '3':
@@ -59,6 +58,8 @@ class Level(pygame.sprite.Sprite):
                         bushes.append(pos)
                     case '6':
                         Ammunition(pos, TILE_SIZE, self.sprites)
+                    case '7':
+                        Enemy(pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, self.sprites)
 
         self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, self.sprites)
 

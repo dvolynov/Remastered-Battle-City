@@ -7,3 +7,4 @@ from units.box2 import Box2
 from units.bush import Bush
 from units.ground import Ground
 from units.ammunition import Ammunition
+from units.enemy import Enemy
