@@ -1,6 +1,7 @@
 import pygame
 from units.turret import Turret
 from units.shell import Shell
+from debug import show
 
 
 class Tank(pygame.sprite.Sprite):
@@ -21,11 +22,15 @@ class Tank(pygame.sprite.Sprite):
         self.vector = pygame.math.Vector2()
 
         self.speed = speed
-        self.reloading = reloading
-        self.cur_reloading = reloading
+
         self.shot_speed = shot_speed
         self.damage = damage
         self.ammunition = ammunition
+        self.reloading = reloading * 1000
+        self.is_shot_ready = False
+        self.cur_reloading = 0
+        self.start_reloading = pygame.time.get_ticks()
+        self.left_time_reloading = self.get_left_time_reloading()
 
         self.hp = hp
 
@@ -63,10 +68,13 @@ class Tank(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = self.rect.center)
 
     def update(self):
-        self.turret.draw()
+        self.input()
+        self.move(self.speed)
+        self.turret.update(self.rect)
+        self.set_shot_ready()
 
     def shot(self):
-        if self.cur_reloading >= self.reloading and self.ammunition:
+        if self.is_shot_ready and self.ammunition:
             
             if self.turret.vector == (0, -1): pos = (self.rect.centerx, self.turret.rect.top - self.shell_size[1] * 3)
             elif self.turret.vector == (0, 1): pos = (self.rect.centerx, self.turret.rect.bottom + self.shell_size[1] * 3)
@@ -74,7 +82,18 @@ class Tank(pygame.sprite.Sprite):
             elif self.turret.vector == (1, 0): pos = (self.turret.rect.right + self.shell_size[0] * 10, self.rect.centery)
 
             Shell(pos, self.turret.vector, self.shot_speed, self.damage, self.image_shell_origin, [self.visible_sprites], self.obstacle_sprites)
+
             self.ammunition -= 1
-            self.cur_reloading = 0
-        else:
-            self.cur_reloading += 0.07
+            self.is_shot_ready = False
+            self.start_reloading = pygame.time.get_ticks()
+
+    def set_shot_ready(self):
+        self.cur_reloading = pygame.time.get_ticks()
+        self.left_time_reloading = self.get_left_time_reloading()
+
+        if self.left_time_reloading <= 0:
+            self.is_shot_ready = True
+
+    def get_left_time_reloading(self):
+        left_time_reloading = self.reloading - (self.cur_reloading - self.start_reloading)
+        return left_time_reloading if left_time_reloading > 0 else 0

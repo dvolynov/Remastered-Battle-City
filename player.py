@@ -59,4 +59,7 @@ class Player(Tank):
         self.input()
         self.move(self.speed)
         self.turret.update(self.rect)
+        self.set_shot_ready()
+        
         show(self.ammunition)
+        show(self.left_time_reloading // 100, x = 70, y = 10)
