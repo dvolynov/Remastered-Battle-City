@@ -1,11 +1,13 @@
 import pygame
+from debug import show
+
 
 
 class Turret:
     
     def __init__(self, pos, image_origin, tank_rect, visible_sprites):
         self.image_origin = image_origin
-        self.image = self.image_origin
+        self.image = image_origin
         self.rect = self.image.get_rect(topleft = pos)
         self.visible_sprites = visible_sprites
         self.tank_rect = tank_rect

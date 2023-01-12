@@ -6,6 +6,7 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, pos, size, path, groups):
         super().__init__(groups)
         self.groups = groups
+        
         self.size = size
         self.pos  = pos
         self.set_new_image(path)

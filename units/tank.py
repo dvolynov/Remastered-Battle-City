@@ -6,11 +6,9 @@ from debug import show
 
 class Tank(pygame.sprite.Sprite):
     
-    def __init__(self, pos, speed, reloading, shot_speed, damage, hp, ammunition, path, groups, obstacle_sprites, boost_sprites):
+    def __init__(self, pos, speed, reloading, shot_speed, damage, hp, ammunition, path, sprites, groups):
         super().__init__(groups)
-        self.obstacle_sprites = obstacle_sprites
-        self.visible_sprites = groups[0]
-        self.boost_sprites = boost_sprites
+        self.sprites = sprites
 
         self.image_origin = pygame.image.load(path[0]).convert_alpha()
         self.image_head_origin = pygame.image.load(path[1]).convert_alpha()
@@ -44,7 +42,7 @@ class Tank(pygame.sprite.Sprite):
         self.collision('vertical')
 
     def collision(self, direction):
-        for sprite in self.obstacle_sprites:
+        for sprite in self.sprites['obstacle']:
             if sprite.rect.colliderect(self.rect):
                 match direction:
                     case 'horisontal':
@@ -59,7 +57,7 @@ class Tank(pygame.sprite.Sprite):
                         if self.vector.y < 0:
                             self.rect.top = sprite.rect.bottom
 
-        for sprite in self.boost_sprites:
+        for sprite in self.sprites['boost']:
             if sprite.rect.colliderect(self.rect):
                 match direction:
                     case 'horisontal':
@@ -83,12 +81,6 @@ class Tank(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image_origin, deg)
         self.rect = self.image.get_rect(center = self.rect.center)
 
-    def update(self):
-        self.input()
-        self.move(self.speed)
-        self.turret.update(self.rect)
-        self.set_shot_ready()
-
     def shot(self):
         if self.is_shot_ready and self.ammunition:
             
@@ -97,7 +89,7 @@ class Tank(pygame.sprite.Sprite):
             elif self.turret.vector == (-1, 0): pos = (self.turret.rect.left - self.shell_size[0] * 3, self.rect.centery)
             elif self.turret.vector == (1, 0): pos = (self.turret.rect.right + self.shell_size[0] * 10, self.rect.centery)
 
-            Shell(pos, self.turret.vector, self.shot_speed, self.damage, self.image_shell_origin, [self.visible_sprites], self.obstacle_sprites)
+            Shell(pos, self.turret.vector, self.shot_speed, self.damage, self.image_shell_origin, self.sprites)
 
             self.ammunition -= 1
             self.is_shot_ready = False
@@ -113,3 +105,16 @@ class Tank(pygame.sprite.Sprite):
     def get_left_time_reloading(self):
         left_time_reloading = self.reloading - (self.cur_reloading - self.start_reloading)
         return left_time_reloading if left_time_reloading > 0 else 0
+
+    def hit(self):
+        self.hp -= self.damage
+
+    def input(self):
+        self.vector.x = 0
+        self.vector.y = 0
+
+    def update(self):
+        self.input()
+        self.move(self.speed)
+        self.turret.update(self.rect)
+        self.set_shot_ready()

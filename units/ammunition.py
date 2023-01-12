@@ -4,11 +4,12 @@ from units.tile import Tile
 
 class Ammunition(Tile):
     
-    def __init__(self, pos, size, groups):
+    def __init__(self, pos, size, sprites):
         self.amount = 3
         path = 'assets/ammunition.png'
+
+        groups = [sprites['visible'], sprites['boost']]
         super().__init__(pos, size, path, groups)
-        self.groups = groups
 
     def add_boost(self, tank):
         tank.ammunition += self.amount

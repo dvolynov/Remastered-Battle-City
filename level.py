@@ -16,9 +16,11 @@ class Level(pygame.sprite.Sprite):
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
 
-        self.visile_sprites = YSortCameraGroup()
-        self.obstacle_sprites = pygame.sprite.Group()
-        self.boost_sprites = pygame.sprite.Group()
+        self.sprites = {
+            'visible': YSortCameraGroup(),
+            'obstacle': pygame.sprite.Group(),
+            'boost': pygame.sprite.Group()
+        }
 
         self.create_map()
 
@@ -39,31 +41,33 @@ class Level(pygame.sprite.Sprite):
 
                 x = j * TILE_SIZE
                 y = i * TILE_SIZE
+                pos = (x, y)
 
-                Ground((x, y), TILE_SIZE, [self.visile_sprites])
+                Ground(pos, TILE_SIZE, self.sprites)
 
                 match tile_id:
                     case '1':
-                        Stone((x, y), TILE_SIZE, [self.visile_sprites, self.obstacle_sprites])
+                        Stone(pos, TILE_SIZE, self.sprites)
+                        # Tank((x, y), SPEED, RELOADING, SHOT_SPEED, DAMAGE, 150, 1000, self.sprites)
                     case '2':
-                        Box1((x, y), TILE_SIZE, [self.visile_sprites, self.obstacle_sprites])
+                        Box1(pos, TILE_SIZE, self.sprites)
                     case '3':
-                        Box2((x, y), TILE_SIZE, [self.visile_sprites, self.obstacle_sprites])
+                        Box2(pos, TILE_SIZE, self.sprites)
                     case '4':
-                        player_pos = (x, y)
+                        player_pos = pos
                     case '5':
-                        bushes.append((x, y))
+                        bushes.append(pos)
                     case '6':
-                        Ammunition((x, y), TILE_SIZE, [self.visile_sprites, self.boost_sprites])
+                        Ammunition(pos, TILE_SIZE, self.sprites)
 
-        self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, [self.visile_sprites], self.obstacle_sprites, self.boost_sprites)
+        self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, self.sprites)
 
-        for x, y in bushes:
-            Bush((x, y), TILE_SIZE, [self.visile_sprites])
+        for pos in bushes:
+            Bush(pos, TILE_SIZE, self.sprites)
 
     def run(self):
-        self.visile_sprites.custom_draw(self.player)
-        self.visile_sprites.update()
+        self.sprites['visible'].custom_draw(self.player)
+        self.sprites['visible'].update()
  
 
 class YSortCameraGroup(pygame.sprite.Group):

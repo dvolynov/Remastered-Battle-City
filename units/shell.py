@@ -2,10 +2,11 @@ import pygame
 
 
 class Shell(pygame.sprite.Sprite):
-    def __init__(self, pos, vector, shot_speed, damage, image, groups, obstacle_sprites):
-        super().__init__(groups)
-        self.visible_sprites = groups[0]
-        self.obstacle_sprites = obstacle_sprites
+    def __init__(self, pos, vector, shot_speed, damage, image, sprites):
+        self.groups = [sprites['visible']]
+        super().__init__(self.groups)
+        self.sprites = sprites
+        
         self.image = image
         self.rect = self.image.get_rect(topleft = pos)
         self.vector = self.vector = pygame.math.Vector2()
@@ -19,7 +20,7 @@ class Shell(pygame.sprite.Sprite):
         self.rect.centery += self.shot_speed * self.vector.y 
 
     def ishit(self): 
-        for sprite in self.obstacle_sprites:
+        for sprite in self.sprites['obstacle']:
             if sprite.rect.colliderect(self.rect):
 
                 if self.vector.x != 0:
@@ -30,9 +31,13 @@ class Shell(pygame.sprite.Sprite):
                         return sprite
         return False
 
+    def remove_self(self):
+        for group in self.groups:
+            group.remove(self)
+
     def update(self):
         self.fly()
         hited = self.ishit()
         if hited:
-            self.visible_sprites.remove(self)
+            self.remove_self()
             hited.hit()
