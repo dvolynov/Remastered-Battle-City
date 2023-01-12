@@ -6,10 +6,11 @@ from debug import show
 
 class Tank(pygame.sprite.Sprite):
     
-    def __init__(self, pos, speed, reloading, shot_speed, damage, hp, ammunition, path, groups, obstacle_sprites):
+    def __init__(self, pos, speed, reloading, shot_speed, damage, hp, ammunition, path, groups, obstacle_sprites, boost_sprites):
         super().__init__(groups)
         self.obstacle_sprites = obstacle_sprites
         self.visible_sprites = groups[0]
+        self.boost_sprites = boost_sprites
 
         self.image_origin = pygame.image.load(path[0]).convert_alpha()
         self.image_head_origin = pygame.image.load(path[1]).convert_alpha()
@@ -57,6 +58,21 @@ class Tank(pygame.sprite.Sprite):
                             self.rect.bottom = sprite.rect.top
                         if self.vector.y < 0:
                             self.rect.top = sprite.rect.bottom
+
+        for sprite in self.boost_sprites:
+            if sprite.rect.colliderect(self.rect):
+                match direction:
+                    case 'horisontal':
+                        if self.vector.x > 0:
+                            sprite.add_boost(self)
+                        if self.vector.x < 0:
+                            sprite.add_boost(self)
+
+                    case 'vertical':
+                        if self.vector.y > 0:
+                            sprite.add_boost(self)
+                        if self.vector.y < 0:
+                            sprite.add_boost(self)
 
     def rotate(self, vector):
         direction = (vector.x, vector.y)

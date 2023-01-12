@@ -18,6 +18,7 @@ class Level(pygame.sprite.Sprite):
 
         self.visile_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
+        self.boost_sprites = pygame.sprite.Group()
 
         self.create_map()
 
@@ -53,9 +54,9 @@ class Level(pygame.sprite.Sprite):
                     case '5':
                         bushes.append((x, y))
                     case '6':
-                        Ammunition((x, y), TILE_SIZE, [self.visile_sprites])
+                        Ammunition((x, y), TILE_SIZE, [self.visile_sprites, self.boost_sprites])
 
-        self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, [self.visile_sprites], self.obstacle_sprites)
+        self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, [self.visile_sprites], self.obstacle_sprites, self.boost_sprites)
 
         for x, y in bushes:
             Bush((x, y), TILE_SIZE, [self.visile_sprites])
