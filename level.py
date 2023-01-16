@@ -66,8 +66,10 @@ class Level(pygame.sprite.Sprite):
         for pos in bushes:
             Bush(pos, TILE_SIZE, self.sprites)
 
+        self.sprites['visible'].set_player(self.player)
+
     def run(self):
-        self.sprites['visible'].custom_draw(self.player)
+        self.sprites['visible'].custom_draw()
         self.sprites['visible'].update()
  
 
@@ -80,10 +82,13 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2(100, 200)
 
-    def custom_draw(self, player):
-        self.offset.x = player.rect.centerx - self.half_width
-        self.offset.y = player.rect.centery - self.half_height
+    def custom_draw(self):
+        self.offset.x = self.player.rect.centerx - self.half_width
+        self.offset.y = self.player.rect.centery - self.half_height
 
         for sprite in self.sprites():
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
+
+    def set_player(self, player):
+        self.player = player

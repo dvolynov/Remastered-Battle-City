@@ -7,7 +7,7 @@ from settings import FPS
 class Player(Tank):
     
     def __init__(self, pos, speed, reloading, shot_speed, damage, sprites):
-        path = ["assets/body.png", "assets/head.png", 'assets/bullet.png']
+        path = ["assets/body_green.png", "assets/head_green.png", 'assets/bullet.png']
         hp = 500
         ammunition = 20
         groups = [sprites['visible']]
@@ -55,7 +55,7 @@ class Player(Tank):
     def update(self):
         self.input()
         self.move(self.speed)
-        self.turret.update(self.rect)
+        self.turret.update()
         self.set_shot_ready()
         
         show(self.ammunition)

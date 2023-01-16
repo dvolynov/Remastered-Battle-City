@@ -33,7 +33,8 @@ class Tank(pygame.sprite.Sprite):
 
         self.hp = hp
 
-        self.turret = Turret(pos, self.image_head_origin, self.rect, groups[0])
+        self.turret = Turret(pos, self.image_head_origin, self, groups[0])
+        print(self.turret)
 
     def move(self, speed):
         self.rect.x += self.vector.x * speed
@@ -116,5 +117,5 @@ class Tank(pygame.sprite.Sprite):
     def update(self):
         self.input()
         self.move(self.speed)
-        self.turret.update(self.rect)
+        self.turret.update()
         self.set_shot_ready()

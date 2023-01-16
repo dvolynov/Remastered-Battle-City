@@ -5,7 +5,7 @@ from units.tank import Tank
 class Enemy(Tank):
     
     def __init__(self, pos, speed, reloading, shot_speed, damage, sprites):
-        path = ["assets/enemy.png", "assets/head.png", 'assets/bullet.png']
+        path = ["assets/body_brown.png", "assets/head_brown.png", 'assets/bullet.png']
         hp = 200
         ammunition = 20
         groups = [sprites['visible'], sprites['obstacle']]
