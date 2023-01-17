@@ -1,14 +1,12 @@
 import pygame
-
 import random
 import os
 import csv
 
-from settings import *
-
-from units import *
-from player import Player
-
+import settings
+import groups
+import objects
+import sprites
 
 
 class Level(pygame.sprite.Sprite):
@@ -17,14 +15,15 @@ class Level(pygame.sprite.Sprite):
         self.display_surface = pygame.display.get_surface()
 
         self.sprites = {
-            'visible': YSortCameraGroup(),
+            'visible': groups.YSortCameraGroup(),
             'obstacle': pygame.sprite.Group(),
-            'boost': pygame.sprite.Group()
+            'boost': pygame.sprite.Group(),
+            'object': pygame.sprite.Group()
         }
 
-        self.create_map()
+        self._create_map()
 
-    def create_map(self):
+    def _get_map_from_csv(self):
         maps_amount = len(os.listdir('maps'))
         map_id = random.randint(0, maps_amount - 1)
         map_path = "maps/" + os.listdir('maps')[map_id]
@@ -33,62 +32,50 @@ class Level(pygame.sprite.Sprite):
         for row in csv.reader(open(map_path), delimiter=','):
             map.append(list(row))
 
-        player = (0, 0)
-        bushes = []
+        return map
+
+    def _create_map(self):
+        map = self._get_map_from_csv()
+
+        bush_positions = []
 
         for i, row in enumerate(map):
             for j, tile_id in enumerate(row):
 
-                x = j * TILE_SIZE
-                y = i * TILE_SIZE
-                pos = (x, y)
-
-                Ground(pos, TILE_SIZE, self.sprites)
+                x = j * settings.TILE_SIZE
+                y = i * settings.TILE_SIZE
+                position = pygame.math.Vector2(x, y)
+            
+                sprites.Ground(position, self.sprites)
 
                 match tile_id:
                     case '1':
-                        Stone(pos, TILE_SIZE, self.sprites)
+                        sprites.Stone(position, self.sprites)
                     case '2':
-                        Box1(pos, TILE_SIZE, self.sprites)
+                        sprites.Box1(position, self.sprites)
                     case '3':
-                        Box2(pos, TILE_SIZE, self.sprites)
+                        sprites.Box2(position, self.sprites)
                     case '4':
-                        player_pos = pos
+                        player_position = position
                     case '5':
-                        bushes.append(pos)
+                        bush_positions.append(position)
                     case '6':
-                        Ammunition(pos, TILE_SIZE, self.sprites)
-                    case '7':
-                        Enemy(pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, self.sprites)
+                        sprites.Ammunition(position, self.sprites)
+                    # case '7':
+                    #     objects.Enemy(
+                    #         position, 
+                    #         settings.SPEED, 
+                    #         settings.RELOADING, 
+                    #         settings.SHOT_SPEED, 
+                    #         settings.DAMAGE, 
+                    #         self.sprites
+                    #     )
 
-        self.player = Player(player_pos, SPEED, RELOADING, SHOT_SPEED, DAMAGE, self.sprites)
+        self.player = objects.Player(player_position, self.sprites)
 
-        for pos in bushes:
-            Bush(pos, TILE_SIZE, self.sprites)
-
-        self.sprites['visible'].set_player(self.player)
+        for position in bush_positions:
+            sprites.Bush(position, self.sprites)
 
     def run(self):
+        self.sprites['visible'].set_player(self.player)
         self.sprites['visible'].custom_draw()
-        self.sprites['visible'].update()
- 
-
-class YSortCameraGroup(pygame.sprite.Group):
-
-    def __init__(self):
-        super().__init__()
-        self.display_surface = pygame.display.get_surface()
-        self.half_width = self.display_surface.get_size()[0] // 2
-        self.half_height = self.display_surface.get_size()[1] // 2
-        self.offset = pygame.math.Vector2(100, 200)
-
-    def custom_draw(self):
-        self.offset.x = self.player.rect.centerx - self.half_width
-        self.offset.y = self.player.rect.centery - self.half_height
-
-        for sprite in self.sprites():
-            offset_pos = sprite.rect.topleft - self.offset
-            self.display_surface.blit(sprite.image, offset_pos)
-
-    def set_player(self, player):
-        self.player = player
