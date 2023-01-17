@@ -4,8 +4,10 @@ import units
 
 class Tank(units.Moving):
 
-    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles):
+    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition):
         super().__init__(position, paths['hull'], groups, hp, speed, obstacles)
+        
+        self.ammunition = ammunition
 
         self.turret = Turret(
             position = position, 
@@ -14,7 +16,6 @@ class Tank(units.Moving):
             vector = pygame.math.Vector2(0, -1),
             tank = self,
             damage = 50,
-            ammunition = 20,
             shell_path = paths['shell']
         )
 
@@ -34,13 +35,11 @@ class Tank(units.Moving):
 
 class Turret(units.Sprite):
 
-    def __init__(self, position, path, groups, vector, tank, damage, ammunition, shell_path):
+    def __init__(self, position, path, groups, vector, tank, damage, shell_path):
         super().__init__(position, path, groups)
         self.position = position
         self.vector = vector
         self.tank = tank
-
-        self.ammunition = ammunition
 
         self.shell_path = shell_path
         self.shell_damage = damage
@@ -104,7 +103,7 @@ class Turret(units.Sprite):
                 damage = self.shell_damage
             )
 
-            self.ammunition -= 1
+            self.tank.ammunition -= 1
             self.is_shot_ready = False
             self.start_reloading = pygame.time.get_ticks()
 
@@ -115,7 +114,7 @@ class Turret(units.Sprite):
     def _set_shot_ready(self):
         self.cur_reloading_time = pygame.time.get_ticks()
         self._set_reloading()
-        if self.reloading <= 0 and self.ammunition > 0: 
+        if self.reloading <= 0 and self.tank.ammunition > 0: 
             self.is_shot_ready = True
 
     def _additional_update(self):

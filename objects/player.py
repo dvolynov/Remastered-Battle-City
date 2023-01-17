@@ -6,22 +6,47 @@ from debug import show
 class Player(sprites.Tank):
     
     def __init__(self, position, sprites):
-        paths = {
-            "hull": "assets/body_green.png", 
-            "turret": "assets/head_green.png", 
-            "shell": "assets/bullet.png"
-        }
-        hp = 500
-        speed = 3
-        groups = [sprites['visible'], sprites['obstacle']]
-        obstacles = sprites['obstacle']
-        visibles = sprites['visible']
-        super().__init__(position, paths, groups, hp, speed, obstacles, visibles)
+        super().__init__(
+            position, 
+            paths = {
+                "hull": "assets/body_green.png", 
+                "turret": "assets/head_green.png", 
+                "shell": "assets/bullet.png"
+            }, 
+            groups = [sprites['visible'], sprites['obstacle'], sprites['object']],
+            hp = 200, 
+            speed = 3, 
+            obstacles = sprites['obstacle'], 
+            visibles = sprites['visible'], 
+            ammunition=20
+        )
+
+    def _draw(self, surface, position):
+        offset = self.rect.topleft - position
+        # self.ray_tracing(offset, surface)
+
+        surface.blit(self.image, position)
+
+        position_turret = self.turret.rect.topleft - offset
+        self.turret._custom_draw(surface, position_turret)
+
+    def ray_tracing(self, offset, surface):
+        radius = 300
+
+        for sprite in self.obstacles:
+            sprite_position = sprite.rect.center - offset
+            tank_position = self.rect.center - offset
+            diff = sprite_position - tank_position
+            diff = (abs(diff[0]), abs(diff[1]))
+            if diff[0] <= radius and diff[1] <= radius:
+                pygame.draw.aaline(surface, (0, 0, 0), sprite_position, tank_position)
+
 
     def debug(self):
         w, h = pygame.display.get_surface().get_size()
-        show(self.turret.ammunition, x=w/2-40)
-        show(self.turret.reloading//100, x=w/2+20)
+        show(self.hp, x=w/2-100)
+        show(self.ammunition, x=w/2-20)
+        show(self.turret.reloading//100, x=w/2+40)
 
     def _input(self):
         keys = pygame.key.get_pressed()

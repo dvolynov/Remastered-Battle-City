@@ -4,4 +4,5 @@ from sprites.tiles import Box2
 from sprites.tiles import Bush
 from sprites.tiles import Ground
 from sprites.boost import Ammunition
+from sprites.boost import FirstAid
 from sprites.tank import Tank

@@ -10,7 +10,7 @@ class Boost(Sprite):
         self.attribute = attribute
         self.amount = amount
 
-    def collision(self):
+    def _collision(self):
         for object in self.objects:
             if object.rect.colliderect(self.rect):
                 self._add_boost(object)
@@ -19,3 +19,6 @@ class Boost(Sprite):
     def _add_boost(self, object):
         amount = getattr(object, self.attribute)
         setattr(object, self.attribute, amount + self.amount)
+
+    def _additional_update(self):
+        self._collision()

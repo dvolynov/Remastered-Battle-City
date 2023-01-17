@@ -56,6 +56,7 @@ class Level(pygame.sprite.Sprite):
                     case '5': bush_positions.append(position)
                     case '6': sprites.Ammunition(position, self.sprites)
                     case '7': objects.Enemy(position, self.sprites)
+                    case '8': sprites.FirstAid(position, self.sprites)
 
         self.player = objects.Player(player_position, self.sprites)
 
