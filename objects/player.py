@@ -20,8 +20,8 @@ class Player(sprites.Tank):
 
     def debug(self):
         w, h = pygame.display.get_surface().get_size()
-        show(self.turret.ammunition, x=w / 2 - 40)
-        show(self.turret.reloading // 100, x=w / 2 + 20)
+        show(self.turret.ammunition, x=w/2-40)
+        show(self.turret.reloading//100, x=w/2+20)
 
     def _input(self):
         keys = pygame.key.get_pressed()

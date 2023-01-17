@@ -127,7 +127,15 @@ class Shell(units.Moving):
         super().__init__(position, path, groups, hp, speed, obstacles, vector)
         self.damage = damage
 
-    def _collision(self, direction): 
+    def _move(self, speed):
+        self.rect.x += self.vector.x * speed
+        self.rect.y += self.vector.y * speed
+        self._collision()
+
+        self.position = pygame.math.Vector2(self.rect.topleft)
+        self._move_action()
+
+    def _collision(self): 
         for sprite in self.obstacles:
             if sprite.rect.colliderect(self.rect) and self is not sprite:
                 sprite.hit(self.damage)

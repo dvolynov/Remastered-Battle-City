@@ -14,9 +14,9 @@ class Obstacle(Sprite):
         self.hp -= damage
 
         if self.hp <= 0:
-            self.remove()
-
-        self._hit_action()
+            self._remove()
+        else:
+            self._hit_action()
 
     def _hit_action(self):
         pass

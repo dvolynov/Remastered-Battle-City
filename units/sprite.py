@@ -5,8 +5,7 @@ class Sprite(pygame.sprite.Sprite):
 
     def __init__(self, position, path, groups):
         super().__init__(groups)
-        self.image_origin = pygame.image.load(path).convert_alpha()
-        self.image = self.image_origin
+        self._set_image(path)
         self.rect = self.image.get_rect(topleft = position)
         self.position = pygame.math.Vector2(position)
 
@@ -20,6 +19,10 @@ class Sprite(pygame.sprite.Sprite):
     def _rotate(self, degree):
         self.image = pygame.transform.rotate(self.image_origin, degree)
         self._rotate_action(degree)
+
+    def _set_image(self, path):
+        self.image_origin = pygame.image.load(path).convert_alpha()
+        self.image = self.image_origin
 
     def _input(self): pass
 
