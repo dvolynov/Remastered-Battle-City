@@ -8,6 +8,7 @@ class Tank(pygame.sprite.Sprite):
     
     def __init__(self, pos, speed, reloading, shot_speed, damage, hp, ammunition, path, sprites, groups):
         super().__init__(groups)
+        self.groups = groups
         self.sprites = sprites
 
         self.image_origin = pygame.image.load(path[0]).convert_alpha()
@@ -34,7 +35,6 @@ class Tank(pygame.sprite.Sprite):
         self.hp = hp
 
         self.turret = Turret(pos, self.image_head_origin, self, groups[0])
-        print(self.turret)
 
     def move(self, speed):
         self.rect.x += self.vector.x * speed
@@ -107,8 +107,14 @@ class Tank(pygame.sprite.Sprite):
         left_time_reloading = self.reloading - (self.cur_reloading - self.start_reloading)
         return left_time_reloading if left_time_reloading > 0 else 0
 
-    def hit(self):
-        self.hp -= self.damage
+    def hit(self, damage):
+        self.hp -= damage
+        if self.hp <= 0:
+            self.remove_self()
+
+    def remove_self(self):
+        for group in self.groups:
+            group.remove(self)
 
     def input(self):
         self.vector.x = 0

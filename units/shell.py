@@ -4,8 +4,8 @@ import pygame
 class Shell(pygame.sprite.Sprite):
     def __init__(self, pos, vector, shot_speed, damage, image, sprites):
         self.groups = [sprites['visible']]
-        super().__init__(self.groups)
         self.sprites = sprites
+        super().__init__(self.groups)
         
         self.image = image
         self.rect = self.image.get_rect(topleft = pos)
@@ -40,4 +40,4 @@ class Shell(pygame.sprite.Sprite):
         hited = self.ishit()
         if hited:
             self.remove_self()
-            hited.hit()
+            hited.hit(self.damage)
