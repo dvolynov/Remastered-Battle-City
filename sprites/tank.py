@@ -15,12 +15,8 @@ class Tank(units.Moving):
             tank = self
         )
 
-    def premove(self):
+    def _premove(self):
         self.turret._move()
-
-    def debug(self):
-        from debug import show
-        show(self.rect.center)
 
 
 class Turret(units.Sprite):
@@ -30,6 +26,8 @@ class Turret(units.Sprite):
         self.position = position
         self.vector = vector
         self.tank = tank
+
+        self._move()
 
     def _move(self):
         if self.vector == (0, -1):
