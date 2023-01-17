@@ -15,8 +15,15 @@ class Tank(units.Moving):
             tank = self
         )
 
-    def _premove(self):
+    def _move_action(self):
         self.turret._move()
+
+    def _draw(self, surface, position):
+        surface.blit(self.image, position)
+
+        offset = self.rect.topleft - position
+        position_turret = self.turret.rect.topleft - offset
+        self.turret._custom_draw(surface, position_turret)
 
 
 class Turret(units.Sprite):
@@ -52,3 +59,9 @@ class Turret(units.Sprite):
 
     def _rotate_action(self, degree):
         self._set_vector(degree)
+
+    def _draw(self, surface, position):
+        pass
+
+    def _custom_draw(self, surface, position):
+        surface.blit(self.image, position)

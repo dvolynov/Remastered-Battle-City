@@ -10,16 +10,16 @@ class Moving(Obstacle):
         self.vector = pygame.math.Vector2(0, 0)
         self.speed = speed
 
-    def _premove(self):
+    def _move_action(self):
         pass
 
     def _move(self, speed):
-        self._premove()
-        
         self.rect.x += self.vector.x * speed
         self._collision('horisontal')
         self.rect.y += self.vector.y * speed
         self._collision('vertical')
+
+        self._move_action()
 
     def _collision(self, direction):
         for sprite in self.obstacles:
