@@ -21,14 +21,11 @@ class Sprite(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image_origin, degree)
         self._rotate_action(degree)
 
-    def _input(self):
-        pass
+    def _input(self): pass
 
-    def _rotate_action(self, degree):
-        pass
+    def _rotate_action(self, degree): pass
 
-    def debug(self):
-        pass
+    def debug(self): pass
 
     def update(self, surface, position):
         self.debug()

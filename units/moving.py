@@ -10,8 +10,7 @@ class Moving(Obstacle):
         self.vector = pygame.math.Vector2(0, 0)
         self.speed = speed
 
-    def _move_action(self):
-        pass
+    def _move_action(self): pass
 
     def _move(self, speed):
         self.rect.x += self.vector.x * speed
@@ -19,6 +18,7 @@ class Moving(Obstacle):
         self.rect.y += self.vector.y * speed
         self._collision('vertical')
 
+        self.position = pygame.math.Vector2(self.rect.topleft)
         self._move_action()
 
     def _collision(self, direction):
@@ -45,3 +45,4 @@ class Moving(Obstacle):
 
     def _rotate_action(self, degree):
         self._set_vector(degree)
+        self.rect = self.image.get_rect(topleft = self.position)

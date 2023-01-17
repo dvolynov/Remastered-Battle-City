@@ -60,8 +60,7 @@ class Turret(units.Sprite):
     def _rotate_action(self, degree):
         self._set_vector(degree)
 
-    def _draw(self, surface, position):
-        pass
+    def _draw(self, surface, position): pass
 
     def _custom_draw(self, surface, position):
         surface.blit(self.image, position)
