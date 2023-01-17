@@ -27,7 +27,10 @@ class Sprite(pygame.sprite.Sprite):
 
     def debug(self): pass
 
+    def _additional_update(self): pass
+
     def update(self, surface, position):
         self.debug()
         self._input()
         self._draw(surface, position)
+        self._additional_update()

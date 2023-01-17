@@ -49,27 +49,13 @@ class Level(pygame.sprite.Sprite):
                 sprites.Ground(position, self.sprites)
 
                 match tile_id:
-                    case '1':
-                        sprites.Stone(position, self.sprites)
-                    case '2':
-                        sprites.Box1(position, self.sprites)
-                    case '3':
-                        sprites.Box2(position, self.sprites)
-                    case '4':
-                        player_position = position
-                    case '5':
-                        bush_positions.append(position)
-                    case '6':
-                        sprites.Ammunition(position, self.sprites)
-                    # case '7':
-                    #     objects.Enemy(
-                    #         position, 
-                    #         settings.SPEED, 
-                    #         settings.RELOADING, 
-                    #         settings.SHOT_SPEED, 
-                    #         settings.DAMAGE, 
-                    #         self.sprites
-                    #     )
+                    case '1': sprites.Stone(position, self.sprites)
+                    case '2': sprites.Box1(position, self.sprites)
+                    case '3': sprites.Box2(position, self.sprites)
+                    case '4': player_position = position
+                    case '5': bush_positions.append(position)
+                    case '6': sprites.Ammunition(position, self.sprites)
+                    case '7': objects.Enemy(position, self.sprites)
 
         self.player = objects.Player(player_position, self.sprites)
 

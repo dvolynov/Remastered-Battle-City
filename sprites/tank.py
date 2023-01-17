@@ -12,8 +12,14 @@ class Tank(units.Moving):
             path = paths['turret'],     
             groups = visibles,
             vector = pygame.math.Vector2(0, -1),
-            tank = self
+            tank = self,
+            damage = 50,
+            ammunition = 20,
+            shell_path = paths['shell']
         )
+
+    def _shot(self):
+        self.turret._shot()
 
     def _move_action(self):
         self.turret._move()
@@ -28,11 +34,22 @@ class Tank(units.Moving):
 
 class Turret(units.Sprite):
 
-    def __init__(self, position, path, groups, vector, tank):
+    def __init__(self, position, path, groups, vector, tank, damage, ammunition, shell_path):
         super().__init__(position, path, groups)
         self.position = position
         self.vector = vector
         self.tank = tank
+
+        self.ammunition = ammunition
+
+        self.shell_path = shell_path
+        self.shell_damage = damage
+        self.shell_speed = 20
+        self.reloading_time = 1_000
+        self.is_shot_ready = False
+        self.cur_reloading_time = 0
+        self.start_reloading = pygame.time.get_ticks()
+        self._set_reloading()
 
         self._move()
 
@@ -64,3 +81,57 @@ class Turret(units.Sprite):
 
     def _custom_draw(self, surface, position):
         surface.blit(self.image, position)
+
+    def _shot(self):
+        if self.is_shot_ready:
+            if self.vector == (0, -1): 
+                position = (self.rect.centerx, self.rect.top - 21)
+            elif self.vector == (0, 1): 
+                position = (self.rect.centerx, self.rect.bottom + 21)
+            elif self.vector == (-1, 0): 
+                position = (self.rect.left  - 21, self.rect.centery - 28)
+            elif self.vector == (1, 0): 
+                position = (self.rect.right + 70, self.rect.centery - 30)
+
+            Shell(
+                position = position, 
+                path = self.shell_path, 
+                groups = self.tank.groups(), 
+                hp = 1,
+                speed = self.shell_speed, 
+                obstacles = self.tank.obstacles,
+                vector = self.vector,
+                damage = self.shell_damage
+            )
+
+            self.ammunition -= 1
+            self.is_shot_ready = False
+            self.start_reloading = pygame.time.get_ticks()
+
+    def _set_reloading(self):
+        reloading = self.reloading_time - (self.cur_reloading_time - self.start_reloading)
+        self.reloading = reloading if reloading > 0 else 0
+
+    def _set_shot_ready(self):
+        self.cur_reloading_time = pygame.time.get_ticks()
+        self._set_reloading()
+        if self.reloading <= 0 and self.ammunition > 0: 
+            self.is_shot_ready = True
+
+    def _additional_update(self):
+        self._set_shot_ready()
+
+
+class Shell(units.Moving):
+    def __init__(self, position, path, groups, hp, speed, obstacles, vector, damage):
+        super().__init__(position, path, groups, hp, speed, obstacles, vector)
+        self.damage = damage
+
+    def _collision(self, direction): 
+        for sprite in self.obstacles:
+            if sprite.rect.colliderect(self.rect) and self is not sprite:
+                sprite.hit(self.damage)
+                self._remove()
+
+    def _additional_update(self):
+        self._move(self.speed)

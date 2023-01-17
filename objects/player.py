@@ -1,5 +1,6 @@
 import pygame
 import sprites
+from debug import show
 
 
 class Player(sprites.Tank):
@@ -8,7 +9,7 @@ class Player(sprites.Tank):
         paths = {
             "hull": "assets/body_green.png", 
             "turret": "assets/head_green.png", 
-            "bullet": "assets/bullet.png"
+            "shell": "assets/bullet.png"
         }
         hp = 500
         speed = 3
@@ -16,6 +17,11 @@ class Player(sprites.Tank):
         obstacles = sprites['obstacle']
         visibles = sprites['visible']
         super().__init__(position, paths, groups, hp, speed, obstacles, visibles)
+
+    def debug(self):
+        w, h = pygame.display.get_surface().get_size()
+        show(self.turret.ammunition, x=w / 2 - 40)
+        show(self.turret.reloading // 100, x=w / 2 + 20)
 
     def _input(self):
         keys = pygame.key.get_pressed()
@@ -47,4 +53,4 @@ class Player(sprites.Tank):
             self.turret._move()
         
         if keys[pygame.K_SPACE]:
-            self.shot()
+            self._shot()

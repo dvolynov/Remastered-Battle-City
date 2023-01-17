@@ -4,10 +4,10 @@ from units.obstacle import Obstacle
 
 class Moving(Obstacle):
 
-    def __init__(self, position, path, groups, hp, speed, obstacles):
+    def __init__(self, position, path, groups, hp, speed, obstacles, vector=(0, 0)):
         super().__init__(position, path, groups, hp)
         self.obstacles = obstacles
-        self.vector = pygame.math.Vector2(0, 0)
+        self.vector = pygame.math.Vector2(*vector)
         self.speed = speed
 
     def _move_action(self): pass
