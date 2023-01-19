@@ -8,10 +8,11 @@ class Tank(units.Moving):
     def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition, objects):
         super().__init__(position, paths['hull'], groups, hp, speed, obstacles)
         self.objects = objects
-        
+        self.paths = paths
         self.ammunition = ammunition
         self.view_range = 300
         self._set_view_point()
+        self.alive = True
 
         self.turret = Turret(
             position = position, 
@@ -47,9 +48,31 @@ class Tank(units.Moving):
     def _draw(self, surface, position):
         surface.blit(self.image, position)
 
-        offset = self.rect.topleft - position
-        position_turret = self.turret.rect.topleft - offset
-        self.turret._custom_draw(surface, position_turret)
+        if self.alive:
+            offset = self.rect.topleft - position
+            position_turret = self.turret.rect.topleft - offset
+            self.turret._custom_draw(surface, position_turret)
+
+    def hit(self, damage):
+        self.hit_counter += 1
+        self.hp -= damage
+
+        if self.hp <= 0:
+            self._destroyed()
+        else:
+            self._hit_action()
+
+    def _destroyed(self):
+        self.alive = False
+        self._set_image(self.paths['destroyed'])
+        self.turret._remove()
+
+    def update(self, surface, position):
+        if self.alive:
+            self._input()
+            self._additional_update()
+        self.debug()
+        self._draw(surface, position)
 
 
 class Turret(units.Sprite):

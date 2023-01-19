@@ -10,6 +10,7 @@ class Moving(Obstacle):
         self.vector = pygame.math.Vector2(*vector)
         self.speed = speed
         self.orientation = 'vertical'
+        self.direction = 0
 
     def _move_action(self): pass
 
@@ -43,6 +44,8 @@ class Moving(Obstacle):
             case 180: self.vector = pygame.math.Vector2(0, 1)
             case 90:  self.vector = pygame.math.Vector2(-1, 0)
             case -90: self.vector = pygame.math.Vector2(1, 0)
+
+        self.direction = degree
 
     def _rotate_action(self, degree):
         self._set_vector(degree)
