@@ -9,6 +9,7 @@ class Moving(Obstacle):
         self.obstacles = obstacles
         self.vector = pygame.math.Vector2(*vector)
         self.speed = speed
+        self.orientation = 'vertical'
 
     def _move_action(self): pass
 
@@ -45,4 +46,10 @@ class Moving(Obstacle):
 
     def _rotate_action(self, degree):
         self._set_vector(degree)
-        self.rect = self.image.get_rect(topleft = self.position)
+        self._set_orientation(degree)
+    
+    def _set_orientation(self, degree):
+        if degree in (0, 180):
+            self.orientation = 'vertical'
+        elif degree in (-90, 90):
+            self.orientation = 'horisontal'

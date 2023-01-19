@@ -1,13 +1,17 @@
 import pygame
 import units
+import math
 
 
 class Tank(units.Moving):
 
-    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition):
+    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition, objects):
         super().__init__(position, paths['hull'], groups, hp, speed, obstacles)
+        self.objects = objects
         
         self.ammunition = ammunition
+        self.view_range = 300
+        self._set_view_point()
 
         self.turret = Turret(
             position = position, 
@@ -24,6 +28,21 @@ class Tank(units.Moving):
 
     def _move_action(self):
         self.turret._move()
+        self._draw_track()
+        self._set_view_point()
+        
+    def _set_view_point(self):
+        self.view_point = self.rect.center
+
+    def _draw_track(self):
+        left_track = []
+        right_track = []
+
+        match self.orientation:
+            case 'vertical':
+                pass
+            case 'horisontal':
+                pass
 
     def _draw(self, surface, position):
         surface.blit(self.image, position)
@@ -75,6 +94,7 @@ class Turret(units.Sprite):
 
     def _rotate_action(self, degree):
         self._set_vector(degree)
+        self._move()
 
     def _draw(self, surface, position): pass
 
