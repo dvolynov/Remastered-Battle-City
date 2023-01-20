@@ -12,7 +12,7 @@ class Boost(Sprite):
 
     def _collision(self):
         for object in self.objects:
-            if object.rect.colliderect(self.rect):
+            if object.rect.colliderect(self.rect) and object.__class__.__name__ == 'Player':
                 self._add_boost(object)
                 self._remove()
                 
