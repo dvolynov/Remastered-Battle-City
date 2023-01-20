@@ -5,7 +5,7 @@ import math
 
 class Tank(units.Moving):
 
-    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition, objects, damage):
+    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition, objects, damage, shell_speed, reloading_time):
         super().__init__(position, paths['hull'], groups, hp, speed, obstacles)
         self.obstacles = obstacles
         self.visibles = visibles
@@ -23,7 +23,9 @@ class Tank(units.Moving):
             vector = pygame.math.Vector2(0, -1),
             tank = self,
             damage = damage,
-            shell_path = paths['shell']
+            shell_path = paths['shell'],
+            shell_speed = shell_speed,
+            reloading_time = reloading_time
         )
 
     def _shot(self):
@@ -79,7 +81,7 @@ class Tank(units.Moving):
 
 class Turret(units.Sprite):
 
-    def __init__(self, position, path, groups, vector, tank, damage, shell_path):
+    def __init__(self, position, path, groups, vector, tank, damage, shell_path, shell_speed, reloading_time):
         super().__init__(position, path, groups)
         self.position = position
         self.vector = vector
@@ -87,8 +89,8 @@ class Turret(units.Sprite):
 
         self.shell_path = shell_path
         self.shell_damage = damage
-        self.shell_speed = 15
-        self.reloading_time = 1_000
+        self.shell_speed = shell_speed
+        self.reloading_time = reloading_time
         self.is_shot_ready = False
         self.cur_reloading_time = 0
         self.start_reloading = pygame.time.get_ticks()

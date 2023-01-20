@@ -3,13 +3,12 @@ import random
 import os
 import csv
 
-import settings
 import groups
 import objects
 import sprites
 
+import settings
 import hood
-from debug import show
 
 
 class Level(pygame.sprite.Sprite):
@@ -46,8 +45,8 @@ class Level(pygame.sprite.Sprite):
         for i, row in enumerate(map):
             for j, tile_id in enumerate(row):
 
-                x = j * settings.TILE_SIZE
-                y = i * settings.TILE_SIZE
+                x = j * settings.general.tile_size
+                y = i * settings.general.tile_size
                 position = pygame.math.Vector2(x, y)
             
                 sprites.Ground(position, self.sprites)

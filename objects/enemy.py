@@ -1,6 +1,7 @@
 import pygame
 import sprites
 import random
+import settings
 
 
 class Enemy(sprites.Tank):
@@ -15,27 +16,30 @@ class Enemy(sprites.Tank):
                 "destroyed": "assets/body_brown_destroyed.png",
             }, 
             groups = [sprites['visible'], sprites['obstacle'], sprites['object']],
-            hp = 100, 
-            speed = 3, 
+            hp = settings.enemy.hp, 
+            speed = settings.enemy.speed, 
             obstacles = sprites['obstacle'], 
             visibles = sprites['visible'], 
-            ammunition = 20,
+            ammunition = settings.enemy.ammunition,
             objects = sprites['object'],
-            damage = 20
+            damage = settings.enemy.damage,
+            shell_speed = settings.enemy.shell_speed,
+            reloading_time = settings.enemy.reloading_time
         )
 
         self.player = player
 
     def _input(self): 
-        to_add = 80
-        dirs = [0, 180, 90, -90]
+        rotate_coef = settings.enemy.move_rotate_coef
+        
+        directions = [0, 180, 90, -90]
 
-        for _ in range(to_add):
-            dirs.append(self.rotation)
+        for _ in range(rotate_coef - len(directions)):
+            directions.append(self.rotation)
 
-        dir_id = random.randint(0, len(dirs) - 1)
+        dir_id = random.randint(0, len(directions) - 1)
 
-        self._rotate(dirs[dir_id])
+        self._rotate(directions[dir_id])
         self._move(self.speed)
 
     def _focus_enemy(self):

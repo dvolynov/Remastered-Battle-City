@@ -1,5 +1,6 @@
 import pygame
 import sprites
+import settings
 
 
 class Player(sprites.Tank):
@@ -14,13 +15,15 @@ class Player(sprites.Tank):
                 "destroyed": "assets/body_green_destroyed.png"
             }, 
             groups = [sprites['visible'], sprites['obstacle'], sprites['object']],
-            hp = 100, 
-            speed = 3, 
+            hp = settings.player.hp, 
+            speed = settings.player.speed, 
             obstacles = sprites['obstacle'], 
             visibles = sprites['visible'], 
-            ammunition = 20,
+            ammunition = settings.player.ammunition,
             objects = sprites['object'],
-            damage = 30
+            damage = settings.player.damage, 
+            shell_speed = settings.player.shell_speed,
+            reloading_time = settings.player.reloading_time
         )
 
     def _input(self):
