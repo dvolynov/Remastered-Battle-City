@@ -30,7 +30,7 @@ class Enemy(sprites.Tank):
         dirs = [0, 180, 90, -90]
 
         for _ in range(to_add):
-            dirs.append(self.direction)
+            dirs.append(self.rotation)
 
         dir_id = random.randint(0, len(dirs) - 1)
 
@@ -40,8 +40,6 @@ class Enemy(sprites.Tank):
     def _focus_enemy(self):
         x_distance = abs(self.view_point[0] - self.player.view_point[0])
         y_distance = abs(self.view_point[1] - self.player.view_point[1])
-
-        vertices = (self.player.rect.topleft, self.player.rect.bottomright)
 
         if x_distance > y_distance:
             if x_distance <= self.view_range:

@@ -7,6 +7,8 @@ class Tank(units.Moving):
 
     def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition, objects):
         super().__init__(position, paths['hull'], groups, hp, speed, obstacles)
+        self.obstacles = obstacles
+        self.visibles = visibles
         self.objects = objects
         self.paths = paths
         self.ammunition = ammunition
@@ -85,7 +87,7 @@ class Turret(units.Sprite):
 
         self.shell_path = shell_path
         self.shell_damage = damage
-        self.shell_speed = 20
+        self.shell_speed = 15
         self.reloading_time = 1_000
         self.is_shot_ready = False
         self.cur_reloading_time = 0
@@ -138,7 +140,7 @@ class Turret(units.Sprite):
             Shell(
                 position = position, 
                 path = self.shell_path, 
-                groups = self.tank.groups(), 
+                groups = [self.tank.obstacles, self.tank.visibles], 
                 hp = 1,
                 speed = self.shell_speed, 
                 obstacles = self.tank.obstacles,

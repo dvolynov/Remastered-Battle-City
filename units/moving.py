@@ -10,7 +10,7 @@ class Moving(Obstacle):
         self.vector = pygame.math.Vector2(*vector)
         self.speed = speed
         self.orientation = 'vertical'
-        self.direction = 0
+        self.rotation = 0
 
     def _move_action(self): pass
 
@@ -38,21 +38,24 @@ class Moving(Obstacle):
                         if self.vector.y < 0:
                             self.rect.top = sprite.rect.bottom
 
-    def _set_vector(self, degree):
-        match degree:
+    def _rotate_action(self, degree):
+        self.rotation = degree
+        self._set_orientation()
+        self._set_vector()
+    
+    def _set_orientation(self):
+        if self.rotation in (0, 180):
+            self.orientation = 'vertical'
+        elif self.rotation in (-90, 90):
+            self.orientation = 'horisontal'
+
+    def _set_vector(self):
+        match self.rotation:
             case 0:   self.vector = pygame.math.Vector2(0, -1)
             case 180: self.vector = pygame.math.Vector2(0, 1)
             case 90:  self.vector = pygame.math.Vector2(-1, 0)
             case -90: self.vector = pygame.math.Vector2(1, 0)
 
-        self.direction = degree
-
-    def _rotate_action(self, degree):
-        self._set_vector(degree)
-        self._set_orientation(degree)
-    
-    def _set_orientation(self, degree):
-        if degree in (0, 180):
-            self.orientation = 'vertical'
-        elif degree in (-90, 90):
-            self.orientation = 'horisontal'
+    def _additional_update(self):
+        self.vector.x = 0
+        self.vector.y = 0
