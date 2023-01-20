@@ -26,7 +26,7 @@ class Enemy(sprites.Tank):
             shell_speed = settings.enemy.shell_speed,
             reloading_time = settings.enemy.reloading_time
         )
-
+        self.shot_probability = settings.enemy.shot_probability
         self.player = player
 
     def _input(self): 
@@ -49,24 +49,31 @@ class Enemy(sprites.Tank):
         if x_distance > y_distance:
             if x_distance <= self.view_range:
                 if self.view_point[0] < self.player.view_point[0]:
-                    self.turret._rotate(-90)
-                    if self.player.rect.topleft[1] <= self.view_point[1] <= self.player.rect.bottomleft[1]:
-                        self.turret._shot()
+                    if self._random_choice():
+                        self.turret._rotate(-90)
+                        if self.player.rect.topleft[1] <= self.view_point[1] <= self.player.rect.bottomleft[1]:
+                            self._shot()
                 else:
-                    self.turret._rotate(90)
-                    if self.player.rect.topright[1] <= self.view_point[1] <= self.player.rect.bottomright[1]:
-                        self.turret._shot()
+                    if self._random_choice():
+                        self.turret._rotate(90)
+                        if self.player.rect.topright[1] <= self.view_point[1] <= self.player.rect.bottomright[1]:
+                            self._shot()
         else:
             if y_distance <= self.view_range:
                 if self.view_point[1] < self.player.view_point[1]:
-                    self.turret._rotate(180)
-                    if self.player.rect.topleft[0] <= self.view_point[0] <= self.player.rect.topright[0]:
-                        self.turret._shot()
+                    if self._random_choice():
+                        self.turret._rotate(180)
+                        if self.player.rect.topleft[0] <= self.view_point[0] <= self.player.rect.topright[0]:
+                            self._shot()
                 else:
-                    self.turret._rotate(0)
-                    if self.player.rect.bottomleft[0] <= self.view_point[0] <= self.player.rect.bottomright[0]:
-                        self.turret._shot()
+                    if self._random_choice():
+                        self.turret._rotate(0)
+                        if self.player.rect.bottomleft[0] <= self.view_point[0] <= self.player.rect.bottomright[0]:
+                            self._shot()
 
+    def _random_choice(self):
+        if random.choices([True, False], weights=[self.shot_probability, 1-self.shot_probability]):
+            return True
 
     def _additional_update(self):
         self._focus_enemy()

@@ -6,3 +6,4 @@ damage           = 20
 shell_speed      = 15
 reloading_time   = 1_000
 move_rotate_coef = 80
+shot_probability = 0.8
