@@ -26,17 +26,18 @@ class Moving(Obstacle):
     def _collision(self, direction):
         for sprite in self.obstacles:
             if sprite.rect.colliderect(self.rect) and self is not sprite:
-                match direction:
-                    case 'horisontal':
-                        if self.vector.x > 0:
-                            self.rect.right = sprite.rect.left
-                        if self.vector.x < 0:
-                            self.rect.left = sprite.rect.right
-                    case 'vertical':
-                        if self.vector.y > 0:
-                            self.rect.bottom = sprite.rect.top
-                        if self.vector.y < 0:
-                            self.rect.top = sprite.rect.bottom
+                if sprite.__class__.__name__ != 'Shell':
+                    match direction:
+                        case 'horisontal':
+                            if self.vector.x > 0:
+                                self.rect.right = sprite.rect.left
+                            if self.vector.x < 0:
+                                self.rect.left = sprite.rect.right
+                        case 'vertical':
+                            if self.vector.y > 0:
+                                self.rect.bottom = sprite.rect.top
+                            if self.vector.y < 0:
+                                self.rect.top = sprite.rect.bottom
 
     def _rotate_action(self, degree):
         self.rotation = degree

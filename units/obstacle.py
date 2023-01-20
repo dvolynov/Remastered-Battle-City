@@ -6,6 +6,7 @@ class Obstacle(Sprite):
 
     def __init__(self, position, path, groups, hp):
         super().__init__(position, path, groups)
+        self.hp_origin = hp
         self.hp = hp
         self.hit_counter = 0
 

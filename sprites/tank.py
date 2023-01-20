@@ -5,7 +5,7 @@ import math
 
 class Tank(units.Moving):
 
-    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition, objects):
+    def __init__(self, position, paths, groups, hp, speed, obstacles, visibles, ammunition, objects, damage):
         super().__init__(position, paths['hull'], groups, hp, speed, obstacles)
         self.obstacles = obstacles
         self.visibles = visibles
@@ -22,7 +22,7 @@ class Tank(units.Moving):
             groups = visibles,
             vector = pygame.math.Vector2(0, -1),
             tank = self,
-            damage = 50,
+            damage = damage,
             shell_path = paths['shell']
         )
 
@@ -181,9 +181,10 @@ class Shell(units.Moving):
 
     def _collision(self): 
         for sprite in self.obstacles:
-            if sprite.rect.colliderect(self.rect) and self is not sprite:
-                sprite.hit(self.damage)
-                self._remove()
+            if sprite.__class__.__name__ != 'Shell':
+                if sprite.rect.colliderect(self.rect):
+                    sprite.hit(self.damage)
+                    self._remove()
 
     def _additional_update(self):
         self._move(self.speed)

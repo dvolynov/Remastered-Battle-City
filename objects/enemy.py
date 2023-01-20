@@ -15,12 +15,13 @@ class Enemy(sprites.Tank):
                 "destroyed": "assets/body_brown_destroyed.png",
             }, 
             groups = [sprites['visible'], sprites['obstacle'], sprites['object']],
-            hp = 200, 
+            hp = 100, 
             speed = 3, 
             obstacles = sprites['obstacle'], 
             visibles = sprites['visible'], 
             ammunition = 20,
-            objects = sprites['object']
+            objects = sprites['object'],
+            damage = 20
         )
 
         self.player = player

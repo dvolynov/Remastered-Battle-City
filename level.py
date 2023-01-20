@@ -8,6 +8,7 @@ import groups
 import objects
 import sprites
 
+import hood
 from debug import show
 
 
@@ -69,19 +70,10 @@ class Level(pygame.sprite.Sprite):
         for position in bush_positions:
             sprites.Bush(position, self.sprites)
 
+        self.player_hood = hood.Hood(self.player)
+
     def run(self):
         self.sprites['visible'].set_player(self.player)
         self.sprites['visible'].custom_draw()
 
-        self.hood()
-
-    def hood(self):
-        w, h = pygame.display.get_surface().get_size()
-        
-        if self.player.alive:
-            show(self.player.hp, x=w/2-100)
-            show(self.player.ammunition, x=w/2-20)
-            show(self.player.turret.reloading//100, x=w/2+40)
-            show(self.player.rect.center, x=w-200, y=h-50)
-        else:
-            show('Died', x=w/2-80, y=h/2-200, size=100)
+        self.player_hood._draw()

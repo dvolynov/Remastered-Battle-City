@@ -7,7 +7,7 @@ class Box2(Tile):
     def __init__(self, position, sprites):
         super().__init__(
             position = position, 
-            hp = 150,
+            hp = 90,
             path = 'assets/box2.png', 
             groups = [sprites['visible'], sprites['obstacle']]
         )

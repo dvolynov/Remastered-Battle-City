@@ -18,7 +18,12 @@ class Boost(Sprite):
                 
     def _add_boost(self, object):
         amount = getattr(object, self.attribute)
-        setattr(object, self.attribute, amount + self.amount)
+        if hasattr(self, self.attribute + '_origin'):
+            amount_origin = getattr(object, self.attribute + '_origin')
+            if amount + self.amount <= amount_origin:
+                setattr(object, self.attribute, amount + self.amount)
+        else:
+            setattr(object, self.attribute, amount + self.amount)
 
     def _additional_update(self):
         self._collision()
