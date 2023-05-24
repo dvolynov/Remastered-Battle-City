@@ -1,5 +1,7 @@
 # Remastered Battle City
 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
 ![Remastered Battle City](https://user-images.githubusercontent.com/83712099/176535831-dbf946fd-249e-4d1b-a1f1-b33648814867.png)
 
 Remastered Battle City is a project that pays homage to the classic game "Battle City." As a passionate programmer, I embarked on a mission to recreate this beloved game and enhance its gameplay experience.
